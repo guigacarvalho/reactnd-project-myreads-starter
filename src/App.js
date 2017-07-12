@@ -3,15 +3,25 @@ import { BrowserRouter, Route, Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 import BookShelf from './BookShelf.js'
+import BookList from './BookList.js'
 
 class BooksApp extends React.Component {
   state = {
-        books: []
+        books: [],
+        searchResults: [],
+        query: ''
   }
   
   componentDidMount() {
-    BooksAPI.getAll().then((books)=>{
+    BooksAPI.getAll().then((books) => {
       this.setState({books})
+    })
+  }
+
+  search = (event) => {
+    this.setState({query: event.target.value})
+    BooksAPI.search(event.target.value).then((books) => {
+      this.setState({searchResults: books})
     })
   }
 
@@ -23,13 +33,12 @@ class BooksApp extends React.Component {
             <div className="search-books">
               <div className="search-books-bar">
                 <Link to="/" className="close-search">Close</Link>
-                <div className="search-books-input-wrapper">
-                  <input type="text" placeholder="Search by title or author"/>
-                </div>
+                <form className="search-books-input-wrapper">
+                  <input type="text" placeholder="Search by title or author" value={this.state.query} onChange={this.search} />
+                </form>
               </div>
-              {/* TODO: Implement search results behavior */}
               <div className="search-books-results">
-                <ol className="books-grid"></ol>
+                <BookList books={this.state.searchResults}/>
               </div>
             </div>
           )} />  
