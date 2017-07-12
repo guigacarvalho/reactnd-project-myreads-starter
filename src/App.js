@@ -25,6 +25,10 @@ class BooksApp extends React.Component {
     })
   }
 
+  clearSearch = () => {
+    this.setState({query: '', searchResults: []})
+  }
+
   render() {
     return (
       <BrowserRouter>
@@ -55,7 +59,7 @@ class BooksApp extends React.Component {
                 </div>
               </div>
               <div className="open-search">
-                <Link to="/search">Add a book</Link>
+                <Link to="/search" onClick={this.clearSearch}>Add a book</Link>
               </div>
             </div>
           )}/>
