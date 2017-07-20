@@ -8,7 +8,7 @@ class BookList extends React.Component {
                 {
                     this.props.books.length ? this.props.books.map((book, index) => (
                         <li key={index}>
-                            <BookItem book={book}/>
+                            <BookItem book={book} onChange={this.props.onChange}/>
                         </li>
                     )) : ''
                 }

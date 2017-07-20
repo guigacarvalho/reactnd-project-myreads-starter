@@ -8,7 +8,7 @@ class BookItem extends React.Component {
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url('+this.props.book.imageLinks.smallThumbnail+')' }}></div>
                     {/* TODO: Implement Shelf changing behavior */}
                     <div className="book-shelf-changer">
-                    <select> 
+                    <select defaultValue={this.props.book.shelf} onChange={(event) => this.props.onChange(event, this.props.book)}> 
                         <option value="none" disabled>Move to...</option>
                         <option value="currentlyReading">Currently Reading</option>
                         <option value="wantToRead">Want to Read</option>

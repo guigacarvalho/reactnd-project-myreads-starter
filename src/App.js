@@ -25,6 +25,19 @@ class BooksApp extends React.Component {
     })
   }
 
+  changeShelf = (event, book) => {
+    const newShelf = event.target.value;
+    BooksAPI.update(book, newShelf).then(() => {
+      this.setState((state) => ({
+        books: state.books.map((b)=> {
+          if(b.id === book.id)
+            b.shelf = newShelf;
+          return b; 
+        })
+      }));
+    });
+  }
+
   clearSearch = () => {
     this.setState({query: '', searchResults: []})
   }
@@ -42,7 +55,7 @@ class BooksApp extends React.Component {
                 </form>
               </div>
               <div className="search-books-results">
-                <BookList books={this.state.searchResults}/>
+                <BookList books={this.state.searchResults} onChange={this.changeShelf}/>
               </div>
             </div>
           )} />  
@@ -53,9 +66,9 @@ class BooksApp extends React.Component {
               </div>
               <div className="list-books-content">
                 <div>
-                  <BookShelf title="Currently Reading" books={this.state.books.filter((b) => b.shelf === 'currentlyReading')}/>
-                  <BookShelf title="Want to Read" books={this.state.books.filter((b) => b.shelf === 'wantToRead')}/>
-                  <BookShelf title="Read" books={this.state.books.filter((b) => b.shelf === 'read')}/>
+                  <BookShelf title="Currently Reading" books={this.state.books.filter((b) => b.shelf === 'currentlyReading')} onChange={this.changeShelf}/>
+                  <BookShelf title="Want to Read" books={this.state.books.filter((b) => b.shelf === 'wantToRead')} onChange={this.changeShelf}/>
+                  <BookShelf title="Read" books={this.state.books.filter((b) => b.shelf === 'read')} onChange={this.changeShelf}/>
                 </div>
               </div>
               <div className="open-search">
