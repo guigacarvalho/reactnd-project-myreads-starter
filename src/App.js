@@ -28,7 +28,6 @@ class BooksApp extends React.Component {
   changeShelf = (event, book) => {
     const newShelf = event.target.value;
     BooksAPI.update(book, newShelf).then(() => {
-      debugger;
       if(book.shelf !== 'none') { // Book already exists in one of our shelfs
         this.setState((state) => ({
           books: state.books.map((b)=> {
