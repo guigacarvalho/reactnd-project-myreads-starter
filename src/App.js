@@ -28,13 +28,21 @@ class BooksApp extends React.Component {
   changeShelf = (event, book) => {
     const newShelf = event.target.value;
     BooksAPI.update(book, newShelf).then(() => {
-      this.setState((state) => ({
-        books: state.books.map((b)=> {
-          if(b.id === book.id)
-            b.shelf = newShelf;
-          return b; 
-        })
-      }));
+      debugger;
+      if(book.shelf !== 'none') { // Book already exists in one of our shelfs
+        this.setState((state) => ({
+          books: state.books.map((b)=> {
+            if(b.id === book.id)
+              b.shelf = newShelf;
+            return b; 
+          })
+        }));
+      } else { // Adding a new book to one of our shelfs
+        book.shelf = newShelf;
+        this.setState((state) => ({
+          books: state.books.concat([book])
+        }));
+      }
     });
   }
 
@@ -46,7 +54,7 @@ class BooksApp extends React.Component {
     return (
       <BrowserRouter>
         <div className="app">
-          <Route exact path='/search' render={() => (
+          <Route exact path='/search' render={({history}) => (
             <div className="search-books">
               <div className="search-books-bar">
                 <Link to="/" className="close-search">Close</Link>
@@ -55,7 +63,12 @@ class BooksApp extends React.Component {
                 </form>
               </div>
               <div className="search-books-results">
-                <BookList books={this.state.searchResults} onChange={this.changeShelf}/>
+                <BookList books={this.state.searchResults} 
+                  onChange={(event, book) => {
+                    this.changeShelf(event, book)
+                    history.push('/')
+                  }}
+                />
               </div>
             </div>
           )} />  
