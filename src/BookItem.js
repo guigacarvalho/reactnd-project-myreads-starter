@@ -2,13 +2,14 @@ import React from 'react'
 
 class BookItem extends React.Component {
     render(){
+        const {book, onChange } = this.props
+        const { shelf, imageLinks, title, authors } = book
         return (
             <div className="book">
                 <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url('+this.props.book.imageLinks.smallThumbnail+')' }}></div>
-                    {/* TODO: Implement Shelf changing behavior */}
+                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url('+imageLinks.smallThumbnail+')' }}></div>
                     <div className="book-shelf-changer">
-                    <select defaultValue={this.props.book.shelf} onChange={(event) => this.props.onChange(event, this.props.book)}> 
+                    <select defaultValue={shelf} onChange={(event) => onChange(event, book)}> 
                         <option value="none" disabled>Move to...</option>
                         <option value="currentlyReading">Currently Reading</option>
                         <option value="wantToRead">Want to Read</option>
@@ -17,8 +18,8 @@ class BookItem extends React.Component {
                     </select>
                     </div>
                 </div>
-                <div className="book-title">{this.props.book.title}</div>
-                <div className="book-authors">{this.props.book.authors[0]}</div> {/* TODO: add plurals to the authors */}
+                <div className="book-title">{title}</div>
+                <div className="book-authors">{Array.isArray(authors) ? authors.join(', ') : authors}</div>
             </div>
         )
     }
