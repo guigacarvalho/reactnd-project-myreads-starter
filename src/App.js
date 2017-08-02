@@ -20,9 +20,19 @@ class BooksApp extends React.Component {
 
   search = (event) => {
     this.setState({query: event.target.value})
-    BooksAPI.search(event.target.value).then((books) => {
-      this.setState({searchResults: books})
-    })
+    BooksAPI.search(event.target.value).then((searchResults) => {
+        this.setState((state) => 
+          {
+            const currentlibrary = state.books;
+            const updatedSearchResults = searchResults.map((searchResultBook) => {
+              const bookToUpdate = currentlibrary.filter((existingLibraryBook) => {
+                    return searchResultBook.id === existingLibraryBook.id;
+                });
+              return bookToUpdate[0] ? bookToUpdate[0] : searchResultBook;
+            });
+            return { searchResults: updatedSearchResults }
+          });
+    });
   }
 
   changeShelf = (event, book) => {
@@ -33,7 +43,7 @@ class BooksApp extends React.Component {
           books: state.books.map((b)=> {
             if(b.id === book.id)
               b.shelf = newShelf;
-            return b; 
+            return b;
           })
         }));
       } else { // Adding a new book to one of our shelfs
