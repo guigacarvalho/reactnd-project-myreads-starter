@@ -7,7 +7,7 @@ class BookList extends React.Component {
             <ol className="books-grid">
                 {
                     Array.isArray(this.props.books) ? this.props.books.map((book, index) => (
-                        <li key={index}>
+                        <li key={book.id}>
                             <BookItem book={book} onChange={this.props.onChange}/>
                         </li>
                     )) : ''
