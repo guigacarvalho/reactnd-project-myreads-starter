@@ -23,14 +23,18 @@ class BooksApp extends React.Component {
     BooksAPI.search(event.target.value).then((searchResults) => {
         this.setState((state) => 
           {
-            const currentlibrary = state.books;
-            const updatedSearchResults = searchResults.map((searchResultBook) => {
-              const bookToUpdate = currentlibrary.filter((existingLibraryBook) => {
-                    return searchResultBook.id === existingLibraryBook.id;
-                });
-              return bookToUpdate[0] ? bookToUpdate[0] : searchResultBook;
-            });
-            return { searchResults: updatedSearchResults }
+            if(searchResults && !searchResults.error) { // Fixing weird API issue (it returns 200 instead of 404's for empty response)
+              const currentlibrary = state.books;
+              const updatedSearchResults = searchResults.map((searchResultBook) => {
+                const bookToUpdate = currentlibrary.filter((existingLibraryBook) => {
+                      return searchResultBook.id === existingLibraryBook.id;
+                  });
+                return bookToUpdate[0] ? bookToUpdate[0] : searchResultBook;
+              });
+              return { searchResults: updatedSearchResults }
+            } else {
+              return { searchResults: [] }
+            }
           });
     });
   }
@@ -41,9 +45,9 @@ class BooksApp extends React.Component {
       if(book.shelf !== 'none') { // Book already exists in one of our shelfs
         this.setState((state) => ({
           books: state.books.map((b)=> {
-            if(b.id === book.id)
+            if(b.id === book.id) 
               b.shelf = newShelf;
-            return b;
+              return b;
           })
         }));
       } else { // Adding a new book to one of our shelfs
