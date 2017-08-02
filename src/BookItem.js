@@ -4,10 +4,11 @@ class BookItem extends React.Component {
     render(){
         const {book, onChange } = this.props
         const { shelf, imageLinks, title, authors } = book
+        const { smallThumbnail } = imageLinks
         return (
             <div className="book">
                 <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url('+imageLinks.smallThumbnail+')' }}></div>
+                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url('+ smallThumbnail +')' }}></div>
                     <div className="book-shelf-changer">
                     <select defaultValue={shelf} onChange={(event) => onChange(event, book)}> 
                         <option value="none" disabled>Move to...</option>
